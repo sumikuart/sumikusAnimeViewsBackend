@@ -27,8 +27,61 @@ app.use('',myRoutes);
 
 
 //*************************************************************** */ Set up Models
+let userModel = require('./models/user.model.js');
+let onlineModel = require('./models/online.model.js');
 let reviewModel = require('./models/reviews.model.js');
 
+//*************************************************************** */ Online Håndtering:
+
+// Add keep online
+myRoutes.route('/user/online/add').post(function(req,res){
+    let newOnline = new onlineModel(req.body);
+
+    newOnline.save().then(newOnline =>{
+        res.status(200).json({'Online':' Added'})
+    }).catch(err => {
+        res.status(400).send('add Online Fail')
+    })
+})
+
+
+// load keep online
+myRoutes.route('/user/online/get').get(function(req,res){
+    onlineModel.find({},function(err, onlineModel){
+        if(err) {
+            console.log(err)
+        } else {
+            res.json(onlineModel)
+        }
+        
+    })
+})
+
+
+//*************************************************************** */ User Håndtering:
+
+// Add User
+myRoutes.route('/user/add').post(function(req,res){
+    let newUser = new userModel(req.body);
+
+    newUser.save().then(newUser =>{
+        res.status(200).json({'User':' Added'})
+    }).catch(err => {
+        res.status(400).send('add new user Fail')
+    })
+})
+
+// Get User List
+myRoutes.route('/user/getall').get(function(req,res){
+    userModel.find({},function(err, userlist){
+        if(err) {
+            console.log(err)
+        } else {
+            res.json(userlist)
+        }
+        
+    })
+})
 
 
 //*************************************************************** */ Review Data Håndtering:
