@@ -71,6 +71,7 @@ myRoutes.route('/user/add').post(function(req,res){
     })
 })
 
+
 // Get User List
 myRoutes.route('/user/getall').get(function(req,res){
     userModel.find({},function(err, userlist){
@@ -137,5 +138,47 @@ myRoutes.route('/review/getall').get(function(req,res){
     })
 })
 
+// Get Singel Review From Database
+
+myRoutes.route('/review/getone/:id').get(function(req,res){
+    
+    let id = req.params.id;
+
+    reviewModel.findById(id,function(err, review){
+        if(err) {
+            console.log(err)
+        } else {
+            res.json(review)
+        }
+        
+    })
+})
+
+
+// Edit Review From Database
+
+myRoutes.route('/review/update/:id').post(function(req,res){
+    reviewModel.findById(req.params.id, function(err, saveobj){
+
+        if(!saveobj){
+            res.status(400).send('data not found')
+        } else {
+            saveobj.name = req.body.name;
+            saveobj.genre = req.body.genre;
+            saveobj.score = req.body.score;
+            saveobj.description = req.body.description;
+            saveobj.review = req.body.review;
+            saveobj.recomendations = req.body.recomendations;
+            
+   
+        saveobj.save().then(saveobj => {
+            res.json('Review Update')
+        }).catch(err => {
+            res.status(400).send("update fail.")
+        })
+    }
+    })
+
+})
 
 
