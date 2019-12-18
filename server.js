@@ -182,3 +182,18 @@ myRoutes.route('/review/update/:id').post(function(req,res){
 })
 
 
+
+// DELETE Review From Database
+myRoutes.delete('/review/delete/:id', function(req,res, next){
+    reviewModel.deleteOne({_id: req.params.id}, function(err, result){
+        if(err) {
+            console.log('fejl in delete')
+        } else {
+            var svarretur = "Antal Slettede Reviews: " + result.deletedCount
+            res.json(svarretur);
+            console.log("Antal Slettede: " + result.deletedCount) 
+        }
+    }) .catch(function(){
+        console.log("FEJL i Deleted Catch")
+    })
+})
